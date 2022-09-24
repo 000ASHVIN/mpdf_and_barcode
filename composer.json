@@ -1,0 +1,6 @@
+{
+    "require": {
+        "stichoza/google-translate-php": "^4.1",
+        "dompdf/dompdf": "^2.0"
+    }
+}
