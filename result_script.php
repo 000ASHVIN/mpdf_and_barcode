@@ -1,6 +1,7 @@
 <?php
   require_once('vendor/autoload.php');
   use Stichoza\GoogleTranslate\GoogleTranslate;
+  $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
 
   $ar = new GoogleTranslate();
   $ar->setSource('en');
@@ -25,7 +26,7 @@
     ),
     "Content" => "Apple iphone 14 with Power supply",
     "REMARK" => "This should delivered before 4.0 PM",
-    "barcode" => "1234567891234"
+    "barcode" => "123456789123"
   );
 
 
@@ -77,6 +78,19 @@ $html = '
       table tr td {
         padding: 20px 5px;
       }
+      .barcode {
+        width: 140.16px;
+        height: 97.92px;
+      }
+      .reference {
+        position: relative;
+      }
+      .reference p {
+        position: fixed;
+        top: 0;
+        transform: rotate(270deg);
+        
+      }
     </style>
   </head>
   <body style="margin: 0; padding: 0;">
@@ -88,7 +102,8 @@ $html = '
         </td>
         <td style="width:70%;border:1px solid;text-align: center;vertical-align: middle;" colspan="3">
           <br>
-          <img alt="barcode" src="barcode.php?codetype=Code128&size=40&text='. $formData['barcode'] .'&print=true"/>
+          <img alt="barcode" class="barcode" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_A,1,50)) . '"/>
+          <div style="font-family: ocrb;">'.@$formData['barcode'].'</div>
         </td>
       </tr>
       <tr style="height:41pt">
@@ -135,9 +150,11 @@ $html = '
           <p class="s1" style="padding-top: 3pt;padding-left: 8pt;padding-right: 127pt;text-indent: 0pt;line-height: 136%;text-align: left;">NAME : '.$formData['From']['Name'].' Phone : '.$formData['From']['Phone'].'</p>
           <p class="s1" style="padding-top: 3pt;padding-left: 10pt;text-indent: 0pt;text-align: left;">Address : '. $formData['From']['Address'] .'</p>
         </td>
-        <td style="width:54pt;height: 250px;border: 1px solid;text-align: center;vertical-align: middle;">
-          <img alt="barcode" style="transform: rotate(270deg);" src="barcode.php?codetype=Code128&size=40&text='. $formData['barcode'] .'&print=true"/>
-          
+        <td style="width:54pt;height: 250px;border: 1px solid;text-align: center;vertical-align: middle;" colspan="1">
+            <span class="reference" style="position: relative;">
+              <img alt="barcode" class="barcode" style="transform: rotate(270deg);" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_C,2,80)) . '"/>
+              <p style="font-family: ocrb; position: absolute; bottom: 450px; right: 70px; rotate: -90;">'.@$formData['barcode'].'</p>
+            </span>        
         </td>
       </tr>
       <tr style="height:96pt">
