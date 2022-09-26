@@ -37,6 +37,7 @@ $html = '
     <title>pdf</title>
     <meta name="author" content="HP-TMX" />
     <style type="text/css">
+      @page { sheet-size: 100mm 150mm; }
       * {
         margin: 0;
         padding: 0;
@@ -49,7 +50,7 @@ $html = '
         font-style: normal;
         font-weight: normal;
         text-decoration: none;
-        font-size: 8pt;
+        font-size: 10px;
       }
 
       .s2 {
@@ -58,7 +59,7 @@ $html = '
         font-style: normal;
         font-weight: bold;
         text-decoration: none;
-        font-size: 10pt;
+        font-size: 11px;
       }
 
       .s3 {
@@ -76,20 +77,23 @@ $html = '
         overflow: visible;
       }
       table tr td {
-        padding: 20px 5px;
+        padding: 2px 1px;
       }
       .barcode {
-        width: 140.16px;
-        height: 97.92px;
+        width: auto;
       }
       .reference {
         position: relative;
       }
       .reference p {
-        position: fixed;
-        top: 0;
         transform: rotate(270deg);
-        
+      }
+      .barcode.ref {
+        width: 100px;
+        transform: rotate(270deg);
+      }
+      .barcode_number {
+        font-size: 10px;
       }
     </style>
   </head>
@@ -97,13 +101,13 @@ $html = '
 
     <table style="border-collapse:collapse;" cellspacing="0" id="formHtml">
       <tr style="height:45pt">
-        <td style="width:30%;border:1px solid;text-align: center;vertical-align: middle;" colspan="2">
+        <td style="width:40%;border:1px solid;text-align: center;vertical-align: middle;" colspan="2">
             <img style="width: 125px;" src="'.__DIR__.'/Tamex-Logo-English.png" />
         </td>
-        <td style="width:70%;border:1px solid;text-align: center;vertical-align: middle;" colspan="3">
+        <td style="width:60%;border:1px solid;text-align: center;vertical-align: middle;" colspan="3">
           <br>
-          <img alt="barcode" class="barcode" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_A,1,50)) . '"/>
-          <div style="font-family: ocrb;">'.@$formData['barcode'].'</div>
+          <img alt="barcode" class="barcode" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_C,1,50)) . '"/>
+          <div class="barcode_number" style="font-family: ocrb;">'.@$formData['barcode'].'</div>
         </td>
       </tr>
       <tr style="height:41pt">
@@ -150,10 +154,10 @@ $html = '
           <p class="s1" style="padding-top: 3pt;padding-left: 8pt;padding-right: 127pt;text-indent: 0pt;line-height: 136%;text-align: left;">NAME : '.$formData['From']['Name'].' Phone : '.$formData['From']['Phone'].'</p>
           <p class="s1" style="padding-top: 3pt;padding-left: 10pt;text-indent: 0pt;text-align: left;">Address : '. $formData['From']['Address'] .'</p>
         </td>
-        <td style="width:54pt;height: 250px;border: 1px solid;text-align: center;vertical-align: middle;" colspan="1">
+        <td style="width:54pt;height: 110px;border: 1px solid;text-align: center;vertical-align: middle;" colspan="1">
             <span class="reference" style="position: relative;">
-              <img alt="barcode" class="barcode" style="transform: rotate(270deg);" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_C,2,80)) . '"/>
-              <p style="font-family: ocrb; position: absolute; bottom: 450px; right: 70px; rotate: -90;">'.@$formData['barcode'].'</p>
+              <img alt="barcode" class="barcode ref" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_A,2,80)) . '"/>
+              <p class="barcode_number" style="font-family: ocrb; position: absolute; bottom: 231px; right: 15px; rotate: -90;">'.@$formData['barcode'].'</p>
             </span>        
         </td>
       </tr>
@@ -178,11 +182,20 @@ $html = '
   
 </html>';
 
+// echo $html;
+// die;
+
 // mdpf
 $mpdf = new \Mpdf\Mpdf([
   'mode' => 'utf-8',
   'format' => 'A4-P',
-  'orientation' => 'P'
+  'orientation' => 'P',
+  'margin_left' => 1,
+  'margin_right' => 1,
+  'margin_top' => 1,
+  'margin_bottom' => 1,
+  // 'margin_header' => 0,
+  // 'margin_footer' => 0
 ]);
 $mpdf->WriteHTML($html);
 $mpdf->Output();
