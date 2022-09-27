@@ -46,7 +46,6 @@ $html = '
       body { font-family: DejaVu Sans, sans-serif; }
       .s1 {
         color: black;
-        font-family: Calibri, sans-serif;
         font-style: normal;
         font-weight: normal;
         text-decoration: none;
@@ -55,7 +54,6 @@ $html = '
 
       .s2 {
         color: black;
-        font-family: Calibri, sans-serif;
         font-style: normal;
         font-weight: bold;
         text-decoration: none;
@@ -65,7 +63,6 @@ $html = '
 
       .s3 {
         color: black;
-        font-family: Tahoma, sans-serif;
         font-style: normal;
         font-weight: normal;
         text-decoration: none;
@@ -80,10 +77,6 @@ $html = '
       table tr > td {
         padding: 2px 1px;
       }
-      
-      .barcode {
-        width: auto;
-      }
       .reference {
         position: relative;
       }
@@ -96,9 +89,7 @@ $html = '
       }
       .barcode_number {
         font-size: 10px;
-      }
-      .source td {
-        
+        margin-top: 0;
       }
       .source_td {
         height: 30px;
@@ -121,9 +112,8 @@ $html = '
             <img style="width: 125px;" src="'.__DIR__.'/Tamex-Logo-English.png" />
         </td>
         <td style="width:60%;border:1px solid;text-align: center;vertical-align: middle;padding-top: 5px;" colspan="3">
-          
-          <img alt="barcode" class="barcode" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_C,1,50)) . '"/>
-          <div class="barcode_number" style="font-family: ocrb;">'.@$formData['barcode'].'</div>
+          <barcode code="'.@$formData['barcode'].'" type="C128C" text="0"/>
+          <div class="barcode_number">'.@$formData['barcode'].'</div>
         </td>
       </tr>
       <tr style="height:41pt" class="source">
@@ -157,32 +147,37 @@ $html = '
           
           
         </td>
-        <td style="width:64pt;border:1px solid;">
-          <table>
+        <td style="border:1px solid; padding: 0;" colspan="3">
+          <table style="padding: 0; border-collapse: collapse">
             <tr>
-              <td>
-                <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Service</p>
+              <td style="border-right: 1px solid; padding: 0; height: 59px;">
+                <table >
+                  <tr>
+                    <td>
+                      
+                      <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">Service</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="source_td">
+                      <p class="s2" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">'.$formData['Service'].'</p>
+                    </td>
+                  </tr>
+                </table>
               </td>
-            </tr>
-            <tr>
-              <td class="source_td">
-                <p class="s2" style="padding-top: 3pt;padding-left: 6pt;text-indent: 0pt;text-align: left;">'.$formData['Service'].'</p>
-              </td>
-            </tr>
-          </table>
-          
-          
-        </td>
-        <td style="width:88pt;border:1px solid;" colspan="2">
-          <table>
-            <tr>
-              <td>
-                <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">COD</p>
-              </td>
-            </tr>
-            <tr>
-              <td class="source_td">
-                <p class="s2" style="padding-top: 5pt;padding-left: 17pt;text-indent: 0pt;text-align: left;">'.$formData['COD'].'</p>
+              <td style="border-left: 1px solid; padding: 0;">
+                <table >
+                  <tr>
+                    <td>
+                      <p class="s1" style="padding-left: 2pt;text-indent: 0pt;line-height: 10pt;text-align: left;">COD</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="source_td">
+                      <p class="s2" style="padding-top: 5pt;padding-left: 17pt;text-indent: 0pt;text-align: left;">'.$formData['COD'].'</p>
+                    </td>
+                  </tr>
+                </table>
               </td>
             </tr>
           </table>
@@ -205,7 +200,7 @@ $html = '
         </td>
       </tr>
       <tr style="height:104pt">
-        <td style="width:272pt;height: 140px;border: 1px solid;" colspan="5">
+        <td style="width:272pt;height: 120px;border: 1px solid;" colspan="5">
           <table>
             <tr>
               <td>
@@ -223,7 +218,7 @@ $html = '
         </td>
       </tr>
       <tr style="height:114pt">
-        <td style="width:218pt;height: 140px; border: 1px solid;" colspan="4">
+        <td style="width:218pt;height: 168px; border: 1px solid;" colspan="4">
           <table>
               <tr>
                 <td>
@@ -236,13 +231,16 @@ $html = '
         </td>
         <td style="width:54pt;border: 1px solid;text-align: center;vertical-align: middle;" colspan="1">
             <span class="reference" style="position: relative;">
-              <img alt="barcode" class="barcode ref" src="data:image/png;base64,' . base64_encode($generator->getBarcode(@$formData['barcode'], $generator::TYPE_CODE_128_A,2,80)) . '"/>
-              <p class="barcode_number" style="font-family: ocrb; position: absolute; bottom: 150px; right: 15px; rotate: -90;">'.@$formData['barcode'].'</p>
+              <div style="position: absolute; bottom: 140px; right: 8px; rotate: -90; text-align: center;">
+                <barcode code="'.@$formData['barcode'].'" type="C128A" text="0" size="0.6" height="2.2" />
+                <p class="barcode_number">'.@$formData['barcode'].'</p>
+              </div>
+              
             </span>        
         </td>
       </tr>
       <tr style="height:96pt">
-        <td style="width:272pt;height: 133px;border: 1px solid;" colspan="5">
+        <td style="width:272pt;height: 130px;border: 1px solid;" colspan="5">
           <table>
             <tr>
               <td>
@@ -280,6 +278,7 @@ $mpdf = new \Mpdf\Mpdf([
   'margin_right' => 1,
   'margin_top' => 1,
   'margin_bottom' => 1,
+  'forcePortraitMargins' => true
   // 'margin_header' => 0,
   // 'margin_footer' => 0
 ]);
